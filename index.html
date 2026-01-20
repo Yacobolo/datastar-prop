@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yacobolo/datastar-prop - Property Binding Plugin</title>
+    <meta name="description" content="Interactive demo for @yacobolo/datastar-prop - A Datastar plugin for binding reactive signals to DOM element properties with deep reactivity and Lit support">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%E2%9A%A1</text></svg>">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-900: #1f2937;
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            color: var(--gray-900);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            padding-right: 340px;
+        }
+        
+        header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        header h1 {
+            margin: 0 0 0.5rem 0;
+            font-size: 2.5rem;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        header p {
+            margin: 0;
+            color: var(--gray-700);
+            font-size: 1.1rem;
+        }
+        
+        .badges {
+            margin-top: 1rem;
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .badge:hover {
+            background: var(--primary-dark);
+        }
+        
+        .badge.secondary {
+            background: var(--gray-700);
+        }
+        
+        .badge.success {
+            background: var(--success);
+        }
+        
+        .test-section {
+            margin: 2rem 0;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .test-section h2 {
+            color: var(--gray-900);
+            margin: 0 0 0.5rem 0;
+            font-size: 1.5rem;
+        }
+        
+        .test-section > p {
+            color: var(--gray-700);
+            margin: 0 0 1.5rem 0;
+        }
+        
+        .feature-tag {
+            display: inline-block;
+            padding: 0.15rem 0.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+        
+        .feature-tag.unique {
+            background: var(--success);
+        }
+        
+        button {
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border: none;
+            border-radius: 6px;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            background: var(--gray-400);
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        input, textarea {
+            display: block;
+            width: 100%;
+            padding: 0.625rem;
+            margin: 0.5rem 0;
+            border: 2px solid var(--gray-300);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        input:disabled, textarea:disabled {
+            background: var(--gray-100);
+            cursor: not-allowed;
+        }
+        
+        input[type="checkbox"], input[type="range"] {
+            width: auto;
+            display: inline-block;
+            margin: 0;
+        }
+        
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary);
+        }
+        
+        input[type="number"] {
+            width: 100px;
+        }
+        
+        .status {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 320px;
+            height: 100vh;
+            padding: 1.5rem;
+            background: white;
+            border-left: 1px solid var(--gray-200);
+            overflow-y: auto;
+            box-shadow: -4px 0 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .status h3 {
+            margin: 0 0 1rem 0;
+            color: var(--gray-900);
+            font-size: 1.25rem;
+        }
+        
+        .status-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .status-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-600);
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .status-value {
+            color: var(--gray-900);
+            font-weight: 500;
+        }
+        
+        code {
+            background: var(--gray-900);
+            color: var(--gray-50);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+        }
+        
+        pre {
+            background: var(--gray-900);
+            color: var(--gray-50);
+            padding: 1rem;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+        
+        .demo-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .demo-row label {
+            min-width: 120px;
+            color: var(--gray-700);
+            font-weight: 500;
+        }
+        
+        .output {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .output-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-600);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .color-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            border: 2px solid var(--gray-300);
+        }
+        
+        .checkbox-card {
+            border: 2px solid var(--gray-300);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .checkbox-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.05rem;
+        }
+        
+        .checkbox-card-header input[type="checkbox"] {
+            accent-color: white;
+        }
+        
+        .checkbox-card-body {
+            padding: 1rem;
+            background: white;
+        }
+        
+        .checkbox-card-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .checkbox-card-option:hover {
+            background: var(--gray-50);
+        }
+        
+        .checkbox-card-option-title {
+            font-weight: 500;
+            color: var(--gray-900);
+        }
+        
+        .checkbox-card-option-desc {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        .checkbox-card-footer {
+            padding: 0.75rem 1rem;
+            background: var(--gray-50);
+            border-top: 1px solid var(--gray-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .checkbox-card-count {
+            color: var(--gray-700);
+            font-size: 0.9rem;
+        }
+        
+        .info-box {
+            padding: 0.75rem 1rem;
+            background: var(--gray-100);
+            border-left: 4px solid var(--primary);
+            border-radius: 4px;
+            font-size: 0.95rem;
+            margin: 1rem 0;
+        }
+        
+        .info-box.success {
+            border-left-color: var(--success);
+        }
+        
+        .unique-feature {
+            border-left-color: var(--success);
+            background: #ecfdf5;
+        }
+        
+        @media (max-width: 900px) {
+            .container {
+                padding-right: 2rem;
+            }
+            .status {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="status">
+        <h3>Installation</h3>
+        <div class="status-item">
+            <div class="status-label">NPM</div>
+            <code style="display: block; white-space: pre-wrap; word-break: break-all; font-size: 0.7em; padding: 0.5rem;">npm install @yacobolo/datastar-prop</code>
+        </div>
+        <div class="status-item">
+            <div class="status-label">Setup</div>
+            <pre style="font-size: 0.6em; overflow-x: auto; margin: 0; padding: 0.5rem; white-space: pre-wrap; word-break: break-all;">&lt;script type="importmap"&gt;
+{
+  "imports": {
+    "datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@v1.0.0-RC.6/bundles/datastar.js"
+  }
+}
+&lt;/script&gt;
+&lt;script type="module" src="https://cdn.jsdelivr.net/npm/@yacobolo/datastar-prop@1/dist/index.js"&gt;&lt;/script&gt;</pre>
+        </div>
+        
+        <h3>Live State</h3>
+        <div class="status-item">
+            <div class="status-label">Signals</div>
+            <pre data-json-signals style="font-size: 0.65em; overflow-x: auto; margin: 0; padding: 0.5rem; background: var(--gray-50); border-radius: 4px; max-height: 400px;"></pre>
+        </div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>@yacobolo/datastar-prop</h1>
+            <p>Property binding plugin for Datastar with deep reactivity and Lit component support</p>
+            <div class="badges">
+                <a href="https://github.com/yacobolo/datastar-prop" class="badge" target="_blank">GitHub</a>
+                <a href="https://www.npmjs.com/package/@yacobolo/datastar-prop" class="badge" target="_blank">npm</a>
+                <a href="https://data-star.dev" class="badge secondary" target="_blank">Datastar Docs</a>
+                <span class="badge success">Deep Reactivity</span>
+                <span class="badge success">Lit Support</span>
+            </div>
+        </header>
+
+        <!-- Test 1: Single Property - Input Value -->
+        <div class="test-section" data-signals='{ "test1": { "inputValue": "Hello Datastar!" } }'>
+            <h2>Test 1: Single Property - Input Value</h2>
+            <p>Uses <code>data-prop:value</code> to bind the value property directly.</p>
+            
+            <div class="demo-row">
+                <label>Signal value:</label>
+                <input type="text" data-bind="$test1.inputValue" placeholder="Type here..." style="flex: 1; max-width: 300px;">
+            </div>
+            
+            <div class="demo-row">
+                <label>Bound via prop:</label>
+                <input type="text" data-prop:value="$test1.inputValue" readonly style="flex: 1; max-width: 300px;">
+            </div>
+            
+            <div class="demo-row">
+                <button data-on:click="$test1.inputValue = 'Updated!'">Set to "Updated!"</button>
+                <button data-on:click="$test1.inputValue = 'Random ' + Date.now()">Set Random</button>
+            </div>
+            
+            <pre>data-prop:value="$test1.inputValue"</pre>
+        </div>
+
+        <!-- Test 2: Single Property - Disabled State -->
+        <div class="test-section" data-signals='{ "test2": { "isDisabled": false } }'>
+            <h2>Test 2: Single Property - Disabled State</h2>
+            <p>Uses <code>data-prop:disabled</code> to control button/input state.</p>
+            
+            <div class="demo-row">
+                <label>Toggle disabled:</label>
+                <input type="checkbox" data-bind="$test2.isDisabled">
+                <span data-text="$test2.isDisabled ? 'Disabled' : 'Enabled'"></span>
+            </div>
+            
+            <div class="demo-row">
+                <label>Target input:</label>
+                <input type="text" data-prop:disabled="$test2.isDisabled" value="I can be disabled!" style="flex: 1; max-width: 300px;">
+            </div>
+            
+            <div class="demo-row">
+                <button data-on:click="$test2.isDisabled = !$test2.isDisabled">
+                    Toggle (<span data-text="$test2.isDisabled ? 'Disabled' : 'Enabled'"></span>)
+                </button>
+            </div>
+            
+            <pre>data-prop:disabled="$test2.isDisabled"</pre>
+        </div>
+
+        <!-- Test 3: Single Property - Checked State -->
+        <div class="test-section" data-signals='{ "test3": { "isChecked": true, "rangeValue": 50 } }'>
+            <h2>Test 3: Different Input Types</h2>
+            <p>Testing property binding with checkbox <code>checked</code> and range <code>value</code>.</p>
+            
+            <div class="demo-row">
+                <label>Checkbox:</label>
+                <input type="checkbox" data-prop:checked="$test3.isChecked">
+                <span data-text="$test3.isChecked ? 'Checked' : 'Unchecked'"></span>
+                <button data-on:click="$test3.isChecked = !$test3.isChecked">Toggle</button>
+            </div>
+            
+            <div class="demo-row">
+                <label>Range:</label>
+                <input type="range" min="0" max="100" data-prop:value="$test3.rangeValue" style="width: 200px;">
+                <span data-text="$test3.rangeValue"></span>
+                <button data-on:click="$test3.rangeValue = Math.floor(Math.random() * 100)">Random</button>
+            </div>
+            
+            <pre>data-prop:checked="$test3.isChecked"
+data-prop:value="$test3.rangeValue"</pre>
+        </div>
+
+        <!-- Test 4: Multiple Properties -->
+        <div class="test-section" data-signals='{ "test4": { "textValue": "Edit me!", "isReadOnly": false, "maxChars": 100 } }'>
+            <h2>Test 4: Multiple Properties</h2>
+            <p>Uses <code>data-prop</code> without a key to set multiple properties at once.</p>
+            
+            <textarea 
+                data-prop="{ value: $test4.textValue, readOnly: $test4.isReadOnly, maxLength: $test4.maxChars }"
+                rows="3"
+                style="resize: vertical;"
+            ></textarea>
+            
+            <div class="demo-row">
+                <button data-on:click="$test4.textValue = 'The quick brown fox jumps over the lazy dog.'">Set Sample Text</button>
+                <button data-on:click="$test4.isReadOnly = !$test4.isReadOnly">
+                    Toggle Read-Only (<span data-text="$test4.isReadOnly ? 'Read-Only' : 'Editable'"></span>)
+                </button>
+                <button data-on:click="$test4.maxChars = $test4.maxChars === 20 ? 100 : 20">
+                    Max Length: <span data-text="$test4.maxChars"></span>
+                </button>
+            </div>
+            
+            <pre>data-prop="{ value: $test4.textValue, readOnly: $test4.isReadOnly, maxLength: $test4.maxChars }"</pre>
+        </div>
+
+        <!-- Test 5: Deep Reactivity (UNIQUE FEATURE) -->
+        <div class="test-section" data-signals='{ "test5": { "colorConfig": { "r": 99, "g": 102, "b": 241, "name": "Indigo" } } }'>
+            <h2>Test 5: Deep Reactivity <span class="feature-tag unique">Unique Feature</span></h2>
+            <p>Changes to nested properties automatically trigger updates. This is unique to this plugin!</p>
+            
+            <div class="info-box unique-feature">
+                <strong>Deep Reactivity:</strong> Unlike basic property binding, this plugin uses <code>deepRead()</code> to subscribe to ALL nested signal changes. When <code>$colorConfig.r</code> changes, the entire object binding updates.
+            </div>
+            
+            <div class="demo-row">
+                <label>Red:</label>
+                <input type="number" data-bind="$test5.colorConfig.r" min="0" max="255">
+            </div>
+            <div class="demo-row">
+                <label>Green:</label>
+                <input type="number" data-bind="$test5.colorConfig.g" min="0" max="255">
+            </div>
+            <div class="demo-row">
+                <label>Blue:</label>
+                <input type="number" data-bind="$test5.colorConfig.b" min="0" max="255">
+            </div>
+            <div class="demo-row">
+                <label>Name:</label>
+                <input type="text" data-bind="$test5.colorConfig.name" style="width: 200px;">
+            </div>
+            
+            <div class="output">
+                <div class="output-label">Color Preview</div>
+                <div class="demo-row">
+                    <div 
+                        class="color-preview" 
+                        data-attr:style="'background-color: rgb(' + $test5.colorConfig.r + ',' + $test5.colorConfig.g + ',' + $test5.colorConfig.b + ')'"
+                    ></div>
+                    <span data-text="$test5.colorConfig.name" style="font-weight: 600;"></span>
+                </div>
+                <div class="output-label" style="margin-top: 1rem;">Object Value</div>
+                <code data-text="JSON.stringify($test5.colorConfig)" style="display: block; padding: 0.5rem;"></code>
+            </div>
+            
+            <p style="margin-top: 1rem; color: var(--gray-600);">
+                Pass to a web component: <code>&lt;color-picker data-prop:color-config="$test5.colorConfig"&gt;</code>
+            </p>
+            
+            <pre>data-prop:color-config="$test5.colorConfig"
+// Nested changes like $test5.colorConfig.r = 128 trigger updates!</pre>
+        </div>
+
+        <!-- Test 6: Array Binding -->
+        <div class="test-section" data-signals='{ "test6": { "items": ["Apple", "Banana", "Cherry"] } }'>
+            <h2>Test 6: Array Binding</h2>
+            <p>Arrays work too - useful for list components.</p>
+            
+            <div class="demo-row">
+                <button data-on:click="$test6.items.push('Item ' + ($test6.items.length + 1))">Add Item</button>
+                <button data-on:click="$test6.items.pop()" data-prop:disabled="$test6.items.length === 0">Remove Last</button>
+                <button data-on:click="$test6.items = ['One', 'Two', 'Three']">Reset</button>
+            </div>
+            
+            <div class="output">
+                <div class="output-label">Current Items (<span data-text="$test6.items.length"></span>)</div>
+                <code data-text="JSON.stringify($test6.items)" style="display: block; padding: 0.5rem;"></code>
+            </div>
+            
+            <p style="margin-top: 1rem; color: var(--gray-600);">
+                Pass to a list component: <code>&lt;item-list data-prop:items="$test6.items"&gt;</code>
+            </p>
+            
+            <pre>data-prop:items="$test6.items"</pre>
+        </div>
+
+        <!-- Test 7: Kebab-case Conversion (UNIQUE FEATURE) -->
+        <div class="test-section" data-signals='{ "test7": { "myLongPropertyName": "kebab-to-camel works!" } }'>
+            <h2>Test 7: Kebab-case Conversion <span class="feature-tag unique">Unique Feature</span></h2>
+            <p>Property names are automatically converted from kebab-case to camelCase.</p>
+            
+            <div class="info-box unique-feature">
+                <strong>Automatic Conversion:</strong> <code>data-prop:my-long-property-name</code> becomes <code>myLongPropertyName</code> on the element.
+            </div>
+            
+            <div class="demo-row">
+                <label>Signal value:</label>
+                <input type="text" data-bind="$test7.myLongPropertyName" style="flex: 1; max-width: 400px;">
+            </div>
+            
+            <div id="kebab-test-element" style="padding: 1rem; background: var(--gray-100); border-radius: 6px; margin-top: 1rem;">
+                <div class="output-label">Element Property</div>
+                <div data-prop:my-long-property-name="$test7.myLongPropertyName"></div>
+                <code data-text="'myLongPropertyName: ' + (document.getElementById('kebab-test-element')?.myLongPropertyName || 'loading...')"></code>
+            </div>
+            
+            <pre>data-prop:my-long-property-name="$test7.myLongPropertyName"
+// Sets element.myLongPropertyName (not element['my-long-property-name'])</pre>
+        </div>
+
+        <!-- Test 8: Select All Checkboxes -->
+        <div class="test-section">
+            <h2>Test 8: Select All Checkboxes</h2>
+            <p>Use an "all" checkbox to toggle multiple checkboxes at once.</p>
+            
+            <div class="info-box">
+                <strong>Note:</strong> For this pattern, using <code>data-bind</code> with <code>data-effect</code> is often simpler. This demo shows <code>data-prop</code> can handle it too.
+            </div>
+            
+            <form data-signals='{ 
+                "test8": {
+                    "checkboxes": {
+                        "selectAll": false,
+                        "option1": false, 
+                        "option2": false, 
+                        "option3": false
+                    }
+                }
+            }' data-on:change="
+                const name = evt.target.dataset.name;
+                if (name === 'selectAll') {
+                    const checked = evt.target.checked;
+                    $test8.checkboxes.option1 = checked;
+                    $test8.checkboxes.option2 = checked;
+                    $test8.checkboxes.option3 = checked;
+                    return;
+                } else if (name) {
+                    $test8.checkboxes[name] = evt.target.checked;
+                }
+                $test8.checkboxes.selectAll = $test8.checkboxes.option1 && $test8.checkboxes.option2 && $test8.checkboxes.option3;
+            ">
+                <div class="checkbox-card">
+                    <label class="checkbox-card-header">
+                        <input 
+                            type="checkbox" 
+                            data-name="selectAll"
+                            data-prop:checked="$test8.checkboxes.selectAll"
+                        >
+                        <span>Select All Options</span>
+                    </label>
+                    
+                    <div class="checkbox-card-body">
+                        <label class="checkbox-card-option">
+                            <input 
+                                type="checkbox" 
+                                data-name="option1"
+                                data-prop:checked="$test8.checkboxes.option1"
+                            >
+                            <div>
+                                <div class="checkbox-card-option-title">Email Notifications</div>
+                                <div class="checkbox-card-option-desc">Receive updates via email</div>
+                            </div>
+                        </label>
+                        
+                        <label class="checkbox-card-option">
+                            <input 
+                                type="checkbox" 
+                                data-name="option2"
+                                data-prop:checked="$test8.checkboxes.option2"
+                            >
+                            <div>
+                                <div class="checkbox-card-option-title">Push Notifications</div>
+                                <div class="checkbox-card-option-desc">Get instant alerts on your device</div>
+                            </div>
+                        </label>
+                        
+                        <label class="checkbox-card-option">
+                            <input 
+                                type="checkbox" 
+                                data-name="option3"
+                                data-prop:checked="$test8.checkboxes.option3"
+                            >
+                            <div>
+                                <div class="checkbox-card-option-title">Weekly Digest</div>
+                                <div class="checkbox-card-option-desc">Summary of activity sent weekly</div>
+                            </div>
+                        </label>
+                    </div>
+                    
+                    <div class="checkbox-card-footer">
+                        <span class="checkbox-card-count">
+                            <strong data-text="($test8.checkboxes.option1 ? 1 : 0) + ($test8.checkboxes.option2 ? 1 : 0) + ($test8.checkboxes.option3 ? 1 : 0)"></strong> of 3 selected
+                        </span>
+                    </div>
+                </div>
+            </form>
+            
+            <pre>data-prop:checked="$test8.checkboxes.option1"</pre>
+        </div>
+
+        <!-- Test 9: Lit Component Support (UNIQUE FEATURE) -->
+        <div class="test-section" data-signals='{ "test9": { "config": { "theme": "dark", "fontSize": 16 } } }'>
+            <h2>Test 9: Lit Component Support <span class="feature-tag unique">Unique Feature</span></h2>
+            <p>This plugin automatically calls <code>requestUpdate()</code> for Lit components.</p>
+            
+            <div class="info-box unique-feature">
+                <strong>Lit Integration:</strong> Datastar's reactive proxies maintain the same object reference when internal values change. This normally prevents Lit from detecting changes. This plugin calls <code>requestUpdate(propName)</code> to ensure Lit's lifecycle methods fire correctly.
+            </div>
+            
+            <div class="demo-row">
+                <label>Theme:</label>
+                <button data-on:click="$test9.config.theme = $test9.config.theme === 'dark' ? 'light' : 'dark'">
+                    Toggle (<span data-text="$test9.config.theme"></span>)
+                </button>
+            </div>
+            
+            <div class="demo-row">
+                <label>Font Size:</label>
+                <input type="range" min="12" max="24" data-bind="$test9.config.fontSize" style="width: 200px;">
+                <span data-text="$test9.config.fontSize + 'px'"></span>
+            </div>
+            
+            <div class="output">
+                <div class="output-label">Config Object</div>
+                <code data-text="JSON.stringify($test9.config)" style="display: block; padding: 0.5rem;"></code>
+            </div>
+            
+            <p style="margin-top: 1rem; color: var(--gray-600);">
+                Usage with Lit: <code>&lt;my-lit-component data-prop:config="$test9.config"&gt;</code>
+            </p>
+            
+            <pre>// Lit component will receive requestUpdate('config') calls
+// ensuring updated() lifecycle fires even when proxy reference doesn't change</pre>
+        </div>
+
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@v1.0.0-RC.6/bundles/datastar.js"
+            }
+        }
+    </script>
+    <script type="module">
+        // Import the plugin - it will auto-register if 'datastar' is available via importmap
+        import './dist/index.js'
+    </script>
+</body>
+</html>

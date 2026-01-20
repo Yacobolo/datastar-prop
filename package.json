@@ -1,0 +1,58 @@
+{
+  "name": "@yacobolo/datastar-prop",
+  "version": "1.0.0",
+  "description": "A Datastar plugin that provides property binding to sync element properties with reactive signals, with deep reactivity and Lit component support",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/index.js",
+    "dist/index.js.map",
+    "dist/index.d.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc && NODE_ENV=production node esbuild.config.js",
+    "build:dev": "tsc && node esbuild.config.js",
+    "test": "node --test dist/index.test.js",
+    "test:compile": "tsc && node --test dist/index.test.js",
+    "test:browser": "python3 -m http.server 8080",
+    "prepublishOnly": "pnpm build && pnpm test"
+  },
+  "keywords": [
+    "datastar",
+    "plugin",
+    "property",
+    "binding",
+    "reactive",
+    "signals",
+    "lit",
+    "web-components",
+    "deep-reactivity"
+  ],
+  "author": "yacobolo",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yacobolo/datastar-prop.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yacobolo/datastar-prop/issues"
+  },
+  "homepage": "https://github.com/yacobolo/datastar-prop#readme",
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7",
+    "@types/node": "^22.10.0",
+    "datastar": "github:starfederation/datastar",
+    "esbuild": "^0.24.0",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.7.0"
+  }
+}
