@@ -1,6 +1,6 @@
 {
   "name": "@yacobolo/datastar-prop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A Datastar plugin that provides property binding to sync element properties with reactive signals, with deep reactivity and Lit component support",
   "type": "module",
   "main": "dist/index.js",
