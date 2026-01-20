@@ -259,42 +259,16 @@
         }
     </script>
     
-    <!-- Load everything in correct order -->
     <script type="module">
-        console.log('[demo] Starting initialization...')
-        
-        // 1. Import demo components FIRST - defines custom elements so they're upgraded
-        console.log('[demo] Importing demo components...')
+        // 1. Import demo components first - defines custom elements
         await import('./demo/dist/components.js')
-        console.log('[demo] Demo components imported and custom elements defined')
         
-        // 2. Import Datastar - will process DOM with already-upgraded elements
-        console.log('[demo] Importing Datastar...')
+        // 2. Import Datastar
         const Datastar = await import('datastar')
-        console.log('[demo] Datastar imported:', Object.keys(Datastar))
         
-        // 3. Import and register the prop plugin - elements now have requestUpdate
-        console.log('[demo] Importing prop plugin...')
+        // 3. Import and register the prop plugin
         const { default: propPlugin } = await import('./dist/index.js')
-        console.log('[demo] propPlugin imported:', propPlugin)
-        
-        const plugin = propPlugin(Datastar.effect)
-        console.log('[demo] Plugin created:', plugin)
-        
-        Datastar.attribute(plugin)
-        console.log('[demo] Plugin registered via Datastar.attribute()')
-        
-        // 4. Check if elements exist and have properties
-        setTimeout(() => {
-            const sceneViewer = document.querySelector('scene-viewer')
-            const flowDiagram = document.querySelector('flow-diagram')
-            const dataChart = document.querySelector('data-chart')
-            
-            console.log('[demo] Element check:')
-            console.log('  scene-viewer:', sceneViewer, 'hasRequestUpdate:', typeof sceneViewer?.requestUpdate === 'function')
-            console.log('  flow-diagram:', flowDiagram, 'hasRequestUpdate:', typeof flowDiagram?.requestUpdate === 'function')
-            console.log('  data-chart:', dataChart, 'hasRequestUpdate:', typeof dataChart?.requestUpdate === 'function')
-        }, 500)
+        Datastar.attribute(propPlugin(Datastar.effect))
     </script>
 </body>
 </html>

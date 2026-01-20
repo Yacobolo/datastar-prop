@@ -29,10 +29,6 @@ import type { AttributePlugin } from 'datastar/library/src/engine/types'
 // Type for effect function
 type EffectFn = (fn: () => void) => () => void
 
-const DEBUG = true
-const log = (...args: unknown[]) => DEBUG && console.log('[datastar-prop]', ...args)
-const warn = (...args: unknown[]) => DEBUG && console.warn('[datastar-prop]', ...args)
-
 /**
  * Recursively reads all nested properties of an object.
  * This causes Datastar's effect system to subscribe to all nested signals,
@@ -75,15 +71,12 @@ function setProperty(
   value: unknown
 ): void {
   const element = el as unknown as Record<string, unknown>;
-  log('setProperty', { tagName: el.tagName, propName, value, hasRequestUpdate: typeof (element as any).requestUpdate === 'function' });
-  
   element[propName] = value;
 
   // Force Lit update since Datastar proxies maintain same reference
   // This ensures Lit's updated() lifecycle fires even when the proxy
   // reference hasn't changed but internal values have
   if (typeof (element as { requestUpdate?: (name?: string) => void }).requestUpdate === "function") {
-    log('calling requestUpdate on', el.tagName, 'for prop', propName);
     (element as { requestUpdate: (name?: string) => void }).requestUpdate(propName);
   }
 }
@@ -96,8 +89,6 @@ function setProperty(
  * @returns The AttributePlugin configuration
  */
 export default function propPlugin(effect: EffectFn): AttributePlugin<{ key: 'allowed'; value: 'must' }, true> {
-  log('propPlugin factory called with effect:', typeof effect);
-  
   return {
     name: "prop",
     requirement: {
@@ -105,25 +96,12 @@ export default function propPlugin(effect: EffectFn): AttributePlugin<{ key: 'al
       value: "must",
     },
     returnsValue: true,
-    apply({ el, key, rx, value, rawKey }) {
-      log('apply() called', { 
-        tagName: el.tagName, 
-        key, 
-        rawKey,
-        value,
-        hasRx: typeof rx === 'function',
-        elId: (el as HTMLElement).id || '(no id)'
-      });
-
+    apply({ el, key, rx }) {
       const update = () => {
-        log('update() running for', el.tagName, 'key:', key);
-        
         let evalValue: unknown;
         try {
           evalValue = rx!();
-          log('rx() returned:', { key, evalValue, type: typeof evalValue });
-        } catch (e) {
-          warn('rx() threw error:', e);
+        } catch {
           return;
         }
 
@@ -134,11 +112,9 @@ export default function propPlugin(effect: EffectFn): AttributePlugin<{ key: 'al
         if (key) {
           // Single property mode: data-prop:property-name="$signal"
           const propName = kebabToCamel(key);
-          log('Single property mode:', { key, propName, evalValue });
           setProperty(el, propName, evalValue);
         } else {
           // Multi-property mode: data-prop="{ prop1: $signal1, prop2: $signal2 }"
-          log('Multi-property mode:', { evalValue });
           if (evalValue && typeof evalValue === "object" && !Array.isArray(evalValue)) {
             for (const [propName, propValue] of Object.entries(evalValue)) {
               setProperty(el, propName, propValue);
@@ -147,11 +123,7 @@ export default function propPlugin(effect: EffectFn): AttributePlugin<{ key: 'al
         }
       };
 
-      log('Wrapping update in effect for', el.tagName);
-      const cleanup = effect(update);
-      log('effect() returned cleanup function:', typeof cleanup);
-      
-      return cleanup;
+      return effect(update);
     },
   };
 }
@@ -160,26 +132,15 @@ export default function propPlugin(effect: EffectFn): AttributePlugin<{ key: 'al
 if (typeof window !== 'undefined') {
   (async () => {
     try {
-      log('Auto-register: importing datastar...');
       // @ts-ignore - datastar may be available via importmap at runtime
       const datastar = await import('datastar')
-      log('Auto-register: datastar imported', { 
-        hasAttribute: typeof datastar?.attribute === 'function',
-        hasEffect: typeof datastar?.effect === 'function',
-        exports: Object.keys(datastar)
-      });
       
       if (datastar?.attribute && datastar?.effect) {
         const plugin = propPlugin(datastar.effect)
-        log('Auto-register: plugin created', plugin);
         datastar.attribute(plugin)
-        log('Auto-register: Plugin registered successfully')
-      } else {
-        warn('Auto-register: Datastar API not found (attribute/effect)')
       }
-    } catch (e) {
+    } catch {
       // Datastar not available via importmap, plugin needs manual registration
-      warn('Auto-register: Could not auto-register:', e)
     }
   })()
 }
