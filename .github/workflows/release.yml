@@ -95,7 +95,9 @@ jobs:
           generate_release_notes: true
 
       - name: Publish to npm
-        if: steps.check_skip.outputs.skip != 'true'
+        # TODO: Enable when ready to publish to npm
+        # Remove 'false &&' from the condition below to enable
+        if: false && steps.check_skip.outputs.skip != 'true'
         run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
