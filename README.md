@@ -49,7 +49,7 @@ This plugin requires an import map to resolve the `datastar` module:
 <script type="importmap">
 {
   "imports": {
-    "datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@v1.0.0-RC.6/bundles/datastar.js"
+    "datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.7/bundles/datastar.js"
   }
 }
 </script>
@@ -154,40 +154,48 @@ attribute(propPlugin(effect));
 ## Testing
 
 ```bash
-pnpm test
+task test
 ```
 
 ## Development
 
+This project uses [Task](https://taskfile.dev) for task automation.
+
 ```bash
-# Install dependencies
-pnpm install
+# Show available tasks
+task
 
-# Build (production, minified)
-pnpm build
+# Build and run development server
+task dev
 
-# Build (development)
-pnpm build:dev
+# Production build
+task build
 
 # Run tests
-pnpm test
-
-# Serve demo locally
-pnpm test:browser  # then open http://localhost:8080
+task test
 ```
 
-## Development & Releases
+## Releases
 
-This project uses automated releases via GitHub Actions. When you push to `main`:
+Releases are managed manually using Task commands:
 
-1. **Tests run automatically** - Build and tests must pass
-2. **Version bumping** - Add to your commit message:
-   - `[major]` for breaking changes (1.0.0 → 2.0.0)
-   - `[minor]` for new features (1.0.0 → 1.1.0)
-   - Default: patch for bug fixes (1.0.0 → 1.0.1)
-   - `[skip release]` to skip publishing
-3. **Automatic publishing** - Package is published to npm
-4. **GitHub Release created** - With auto-generated release notes
+```bash
+# Bump patch version and publish (1.0.1 → 1.0.2)
+task release:patch
+
+# Bump minor version and publish (1.0.1 → 1.1.0)
+task release:minor
+
+# Bump major version and publish (1.0.1 → 2.0.0)
+task release:major
+```
+
+Each release command will:
+1. Build the project
+2. Run tests
+3. Bump the version
+4. Publish to npm
+5. Push tags to GitHub
 
 ## License
 
