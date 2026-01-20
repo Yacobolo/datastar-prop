@@ -1,0 +1,129 @@
+/**
+ * Tokens Layer
+ * Design tokens extending Open Props
+ * Using oklch for perceptually uniform colors
+ */
+
+:root {
+  /* ========================================
+   * Color Tokens
+   * Using oklch for better color manipulation
+   * ======================================== */
+  
+  /* Surface colors - dark theme */
+  --surface-bg: oklch(12% 0.015 280);
+  --surface-1: oklch(18% 0.015 280);
+  --surface-2: oklch(25% 0.015 280);
+  --surface-3: oklch(32% 0.015 280);
+  
+  /* Text colors */
+  --text-1: oklch(95% 0 0);
+  --text-2: oklch(70% 0.01 280);
+  --text-3: oklch(55% 0.01 280);
+  
+  /* Brand colors - indigo base */
+  --brand-hue: 265;
+  --brand: oklch(65% 0.2 var(--brand-hue));
+  --brand-light: oklch(72% 0.18 var(--brand-hue));
+  --brand-dark: oklch(55% 0.22 var(--brand-hue));
+  --brand-subtle: oklch(25% 0.08 var(--brand-hue));
+  
+  /* Semantic colors */
+  --success: oklch(65% 0.2 145);
+  --success-subtle: oklch(25% 0.08 145);
+  --warning: oklch(75% 0.15 85);
+  --warning-subtle: oklch(30% 0.08 85);
+  --error: oklch(60% 0.2 25);
+  --error-subtle: oklch(25% 0.08 25);
+  --info: oklch(65% 0.15 230);
+  --info-subtle: oklch(25% 0.08 230);
+  
+  /* Code syntax colors */
+  --syntax-comment: oklch(55% 0.02 280);
+  --syntax-keyword: oklch(70% 0.18 300);
+  --syntax-string: oklch(75% 0.15 145);
+  --syntax-number: oklch(75% 0.15 55);
+  --syntax-function: oklch(75% 0.15 230);
+  
+  /* ========================================
+   * Spacing Tokens
+   * Semantic aliases for Open Props sizes
+   * ======================================== */
+  
+  --space-3xs: var(--size-1);   /* 4px */
+  --space-2xs: var(--size-2);   /* 8px */
+  --space-xs: var(--size-3);    /* 12px */
+  --space-sm: var(--size-4);    /* 16px */
+  --space-md: var(--size-5);    /* 20px */
+  --space-lg: var(--size-6);    /* 24px */
+  --space-xl: var(--size-7);    /* 28px */
+  --space-2xl: var(--size-8);   /* 32px */
+  --space-3xl: var(--size-9);   /* 36px */
+  
+  /* ========================================
+   * Typography Tokens
+   * ======================================== */
+  
+  --font-body: var(--font-sans);
+  --font-code: var(--font-mono);
+  --font-heading: var(--font-sans);
+  
+  --text-xs: var(--font-size-00);
+  --text-sm: var(--font-size-0);
+  --text-base: var(--font-size-1);
+  --text-md: var(--font-size-2);
+  --text-lg: var(--font-size-3);
+  --text-xl: var(--font-size-4);
+  --text-2xl: var(--font-size-5);
+  --text-3xl: var(--font-size-6);
+  
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.75;
+  
+  /* ========================================
+   * Border & Radius Tokens
+   * ======================================== */
+  
+  --border-subtle: 1px solid oklch(30% 0.02 280);
+  --border-default: 1px solid oklch(35% 0.02 280);
+  --border-strong: 1px solid oklch(45% 0.02 280);
+  
+  --radius-sm: var(--radius-2);
+  --radius-md: var(--radius-3);
+  --radius-lg: var(--radius-4);
+  --radius-full: var(--radius-round);
+  
+  /* ========================================
+   * Shadow Tokens
+   * Using oklch for consistent shadow colors
+   * ======================================== */
+  
+  --shadow-sm: 0 1px 2px oklch(0% 0 0 / 0.3);
+  --shadow-md: 0 4px 6px oklch(0% 0 0 / 0.3), 0 2px 4px oklch(0% 0 0 / 0.2);
+  --shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.3), 0 4px 6px oklch(0% 0 0 / 0.2);
+  --shadow-glow: 0 0 20px oklch(65% 0.2 var(--brand-hue) / 0.3);
+  
+  /* ========================================
+   * Animation Tokens
+   * ======================================== */
+  
+  --duration-fast: 0.1s;
+  --duration-normal: 0.2s;
+  --duration-slow: 0.3s;
+  
+  --ease-out: var(--ease-out-3);
+  --ease-in-out: var(--ease-in-out-2);
+  --ease-bounce: var(--ease-squish-2);
+  
+  /* ========================================
+   * Layout Tokens
+   * ======================================== */
+  
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 900px;
+  --container-xl: 1200px;
+  
+  --sidebar-width: 320px;
+}

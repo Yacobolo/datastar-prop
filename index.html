@@ -7,322 +7,12 @@
     <meta name="description" content="A Datastar plugin for binding reactive signals to Lit web component properties with deep reactivity support">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%E2%9A%A1</text></svg>">
     
-    <!-- Open Props -->
+    <!-- Open Props - Design tokens -->
     <link rel="stylesheet" href="https://unpkg.com/open-props">
     <link rel="stylesheet" href="https://unpkg.com/open-props/normalize.min.css">
     
-    <style>
-        :root {
-            --surface-bg: var(--gray-9);
-            --surface-1: var(--gray-8);
-            --surface-2: var(--gray-7);
-            --text-1: var(--gray-0);
-            --text-2: var(--gray-4);
-            --brand: var(--indigo-5);
-            --brand-light: var(--indigo-4);
-        }
-        
-        body {
-            background: var(--surface-bg);
-            color: var(--text-1);
-            font-family: var(--font-sans);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: var(--size-6);
-            padding-right: calc(var(--size-6) + 320px);
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: var(--size-8);
-        }
-        
-        header h1 {
-            font-size: var(--font-size-6);
-            font-weight: var(--font-weight-7);
-            margin: 0 0 var(--size-2);
-            background: linear-gradient(135deg, var(--indigo-4), var(--violet-4));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        header p {
-            color: var(--text-2);
-            font-size: var(--font-size-3);
-            margin: 0 0 var(--size-4);
-        }
-        
-        .badges {
-            display: flex;
-            gap: var(--size-2);
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-        
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--size-1);
-            padding: var(--size-1) var(--size-3);
-            background: var(--surface-1);
-            color: var(--text-1);
-            border-radius: var(--radius-2);
-            font-size: var(--font-size-0);
-            text-decoration: none;
-            transition: background var(--ease-2) 0.2s;
-        }
-        
-        .badge:hover {
-            background: var(--surface-2);
-        }
-        
-        .badge.brand {
-            background: var(--brand);
-        }
-        
-        /* Install section */
-        .install {
-            background: var(--surface-1);
-            border-radius: var(--radius-3);
-            padding: var(--size-4);
-            margin-bottom: var(--size-8);
-        }
-        
-        .install-label {
-            font-size: var(--font-size-0);
-            color: var(--text-2);
-            text-transform: uppercase;
-            letter-spacing: var(--font-letterspacing-3);
-            margin-bottom: var(--size-2);
-        }
-        
-        .install code {
-            display: block;
-            background: var(--gray-9);
-            padding: var(--size-3);
-            border-radius: var(--radius-2);
-            font-family: var(--font-mono);
-            font-size: var(--font-size-1);
-            overflow-x: auto;
-        }
-        
-        /* Demo sections */
-        .demo {
-            background: var(--surface-1);
-            border-radius: var(--radius-3);
-            margin-bottom: var(--size-6);
-            overflow: hidden;
-        }
-        
-        .demo-header {
-            padding: var(--size-4);
-            border-bottom: 1px solid var(--surface-2);
-        }
-        
-        .demo-header h2 {
-            font-size: var(--font-size-3);
-            font-weight: var(--font-weight-6);
-            margin: 0 0 var(--size-1);
-            display: flex;
-            align-items: center;
-            gap: var(--size-2);
-        }
-        
-        .demo-header p {
-            color: var(--text-2);
-            font-size: var(--font-size-1);
-            margin: 0;
-        }
-        
-        .demo-canvas {
-            padding: var(--size-4);
-            background: var(--gray-9);
-        }
-        
-        .demo-controls {
-            padding: var(--size-4);
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--size-3);
-            align-items: center;
-        }
-        
-        .control-group {
-            display: flex;
-            align-items: center;
-            gap: var(--size-2);
-        }
-        
-        .control-group label {
-            font-size: var(--font-size-0);
-            color: var(--text-2);
-            white-space: nowrap;
-        }
-        
-        button {
-            padding: var(--size-2) var(--size-3);
-            background: var(--brand);
-            color: white;
-            border: none;
-            border-radius: var(--radius-2);
-            font-size: var(--font-size-0);
-            font-weight: var(--font-weight-5);
-            cursor: pointer;
-            transition: all var(--ease-2) 0.15s;
-        }
-        
-        button:hover {
-            background: var(--brand-light);
-            transform: translateY(-1px);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        button.secondary {
-            background: var(--surface-2);
-        }
-        
-        button.secondary:hover {
-            background: var(--gray-6);
-        }
-        
-        input[type="range"] {
-            width: 120px;
-            accent-color: var(--brand);
-        }
-        
-        input[type="color"] {
-            width: 40px;
-            height: 32px;
-            padding: 0;
-            border: none;
-            border-radius: var(--radius-2);
-            cursor: pointer;
-        }
-        
-        input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--brand);
-        }
-        
-        select {
-            padding: var(--size-2) var(--size-3);
-            background: var(--surface-2);
-            color: var(--text-1);
-            border: none;
-            border-radius: var(--radius-2);
-            font-size: var(--font-size-0);
-            cursor: pointer;
-        }
-        
-        .demo-code {
-            padding: var(--size-4);
-            border-top: 1px solid var(--surface-2);
-        }
-        
-        .demo-code pre {
-            background: var(--gray-9);
-            padding: var(--size-3);
-            border-radius: var(--radius-2);
-            font-family: var(--font-mono);
-            font-size: var(--font-size-0);
-            overflow-x: auto;
-            margin: 0;
-        }
-        
-        .demo-code .comment {
-            color: var(--gray-5);
-        }
-        
-        .demo-code .attr {
-            color: var(--violet-4);
-        }
-        
-        .demo-code .value {
-            color: var(--lime-4);
-        }
-        
-        /* Feature tag */
-        .feature-tag {
-            display: inline-block;
-            padding: var(--size-1) var(--size-2);
-            background: var(--green-9);
-            color: var(--green-3);
-            border-radius: var(--radius-2);
-            font-size: var(--font-size-00);
-            font-weight: var(--font-weight-6);
-        }
-        
-        /* Info box */
-        .info-box {
-            background: var(--indigo-9);
-            border-left: 3px solid var(--brand);
-            padding: var(--size-3);
-            border-radius: 0 var(--radius-2) var(--radius-2) 0;
-            font-size: var(--font-size-1);
-            margin: var(--size-3) 0;
-        }
-        
-        .info-box strong {
-            color: var(--brand-light);
-        }
-        
-        /* Value display */
-        .value-display {
-            font-family: var(--font-mono);
-            background: var(--gray-9);
-            padding: var(--size-1) var(--size-2);
-            border-radius: var(--radius-2);
-            font-size: var(--font-size-0);
-            min-width: 40px;
-            text-align: center;
-        }
-        
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: var(--size-6) 0;
-            color: var(--text-2);
-            font-size: var(--font-size-1);
-        }
-        
-        footer a {
-            color: var(--brand-light);
-            text-decoration: none;
-        }
-        
-        footer a:hover {
-            text-decoration: underline;
-        }
-        
-        @media (max-width: 900px) {
-            .container {
-                padding: var(--size-4);
-                padding-right: var(--size-4);
-            }
-            
-            header h1 {
-                font-size: var(--font-size-5);
-            }
-            
-            .demo-controls {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .control-group {
-                justify-content: space-between;
-            }
-        }
-    </style>
+    <!-- App styles - bundled with CSS layers -->
+    <link rel="stylesheet" href="./demo/dist/styles.css">
 </head>
 <body>
     <div class="container" data-signals='{
@@ -370,7 +60,7 @@
             }
         }
     }'>
-        <header>
+        <header class="header">
             <h1>@yacobolo/datastar-prop</h1>
             <p>Property binding for Lit web components with deep reactivity</p>
             <div class="badges">
@@ -418,7 +108,7 @@
                 <button data-on:click="$flow.nodes[0].color = $flow.nodes[0].color === '#6366f1' ? '#f59e0b' : '#6366f1'">
                     Toggle Input Color
                 </button>
-                <button class="secondary" data-on:click="$flow.nodes.push({ id: String(Date.now()), label: 'New', x: Math.random() * 300 + 50, y: Math.random() * 200 + 50, color: '#ec4899' })">
+                <button class="btn-secondary" data-on:click="$flow.nodes.push({ id: String(Date.now()), label: 'New', x: Math.random() * 300 + 50, y: Math.random() * 200 + 50, color: '#ec4899' })">
                     Add Node
                 </button>
             </div>
@@ -527,10 +217,10 @@
                 <button data-on:click="$chart.data.push({ name: 'New', value: Math.floor(Math.random() * 200) + 50 })">
                     Add Data
                 </button>
-                <button class="secondary" data-on:click="$chart.data.pop()">
+                <button class="btn-secondary" data-on:click="$chart.data.pop()">
                     Remove Last
                 </button>
-                <button class="secondary" data-on:click="$chart.data = $chart.data.map(d => ({ ...d, value: Math.floor(Math.random() * 200) + 50 }))">
+                <button class="btn-secondary" data-on:click="$chart.data = $chart.data.map(d => ({ ...d, value: Math.floor(Math.random() * 200) + 50 }))">
                     Randomize
                 </button>
             </div>
@@ -546,7 +236,7 @@
             </div>
         </div>
 
-        <footer>
+        <footer class="footer">
             Built with <a href="https://lit.dev">Lit</a> and <a href="https://data-star.dev">Datastar</a>
         </footer>
     </div>

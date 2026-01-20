@@ -22,6 +22,7 @@
     "build": "tsc && NODE_ENV=production node esbuild.config.js",
     "build:dev": "tsc && node esbuild.config.js",
     "build:demo": "tsc -p demo/tsconfig.json && node esbuild.config.js",
+    "build:css": "node esbuild.config.js",
     "dev": "pnpm build:dev && pnpm build:demo && go run serve.go",
     "test": "node --test dist/index.test.js",
     "test:compile": "tsc && node --test dist/index.test.js",

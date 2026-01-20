@@ -1,0 +1,209 @@
+/**
+ * Base Layer
+ * Default element styles
+ * Using CSS nesting and logical properties
+ */
+
+body {
+  background: var(--surface-bg);
+  color: var(--text-1);
+  font-family: var(--font-body);
+  line-height: var(--leading-normal);
+}
+
+/* ========================================
+ * Typography
+ * ======================================== */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-6);
+  line-height: var(--leading-tight);
+  color: var(--text-1);
+}
+
+h1 { font-size: var(--text-3xl); }
+h2 { font-size: var(--text-2xl); }
+h3 { font-size: var(--text-xl); }
+h4 { font-size: var(--text-lg); }
+
+p {
+  color: var(--text-2);
+  
+  & + p {
+    margin-block-start: var(--space-sm);
+  }
+}
+
+a {
+  color: var(--brand-light);
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out);
+  
+  &:hover {
+    color: var(--brand);
+    text-decoration: underline;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+}
+
+code {
+  font-family: var(--font-code);
+  font-size: 0.9em;
+  background: var(--surface-2);
+  padding-inline: var(--space-2xs);
+  padding-block: 2px;
+  border-radius: var(--radius-sm);
+}
+
+pre {
+  font-family: var(--font-code);
+  font-size: var(--text-sm);
+  background: var(--surface-bg);
+  padding: var(--space-xs);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  
+  & code {
+    background: none;
+    padding: 0;
+  }
+}
+
+/* ========================================
+ * Form Elements
+ * ======================================== */
+
+button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2xs);
+  padding-inline: var(--space-xs);
+  padding-block: var(--space-2xs);
+  background: var(--brand);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  font-weight: var(--font-weight-5);
+  cursor: pointer;
+  transition: 
+    background var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+  
+  &:hover {
+    background: var(--brand-light);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--brand-light);
+    outline-offset: 2px;
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+input,
+select,
+textarea {
+  background: var(--surface-2);
+  color: var(--text-1);
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding-inline: var(--space-xs);
+  padding-block: var(--space-2xs);
+  font-size: var(--text-sm);
+  transition: 
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+  
+  &:hover {
+    border-color: oklch(40% 0.02 280);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: var(--brand);
+    box-shadow: 0 0 0 3px var(--brand-subtle);
+  }
+  
+  &::placeholder {
+    color: var(--text-3);
+  }
+}
+
+input[type="range"] {
+  inline-size: 120px;
+  accent-color: var(--brand);
+  background: transparent;
+  border: none;
+  padding: 0;
+  
+  &:focus {
+    box-shadow: none;
+  }
+}
+
+input[type="color"] {
+  inline-size: 40px;
+  block-size: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  overflow: hidden;
+  
+  &::-webkit-color-swatch-wrapper {
+    padding: 0;
+  }
+  
+  &::-webkit-color-swatch {
+    border: none;
+    border-radius: var(--radius-sm);
+  }
+}
+
+input[type="checkbox"] {
+  inline-size: 18px;
+  block-size: 18px;
+  accent-color: var(--brand);
+  cursor: pointer;
+}
+
+select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--space-2xs) center;
+  padding-inline-end: var(--space-lg);
+}
+
+label {
+  font-size: var(--text-sm);
+  color: var(--text-2);
+  cursor: pointer;
+}

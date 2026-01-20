@@ -1,0 +1,318 @@
+/**
+ * Components Layer
+ * Reusable component patterns
+ * Using CSS nesting and container queries
+ */
+
+/* ========================================
+ * Layout Components
+ * ======================================== */
+
+.container {
+  max-inline-size: var(--container-lg);
+  margin-inline: auto;
+  padding-inline: var(--space-lg);
+  padding-inline-end: calc(var(--space-lg) + var(--sidebar-width));
+  
+  @media (width <= 900px) {
+    padding-inline: var(--space-sm);
+  }
+}
+
+/* ========================================
+ * Header Component
+ * ======================================== */
+
+.header {
+  text-align: center;
+  margin-block-end: var(--space-2xl);
+  
+  & h1 {
+    font-size: var(--text-3xl);
+    font-weight: var(--font-weight-7);
+    margin-block-end: var(--space-2xs);
+    background: linear-gradient(135deg, var(--brand-light), oklch(70% 0.18 300));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    @media (width <= 900px) {
+      font-size: var(--text-2xl);
+    }
+  }
+  
+  & p {
+    color: var(--text-2);
+    font-size: var(--text-lg);
+    margin-block-end: var(--space-sm);
+  }
+}
+
+/* ========================================
+ * Badge Component
+ * ======================================== */
+
+.badges {
+  display: flex;
+  gap: var(--space-2xs);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3xs);
+  padding-inline: var(--space-xs);
+  padding-block: var(--space-3xs);
+  background: var(--surface-1);
+  color: var(--text-1);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  text-decoration: none;
+  transition: 
+    background var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+  
+  &:hover {
+    background: var(--surface-2);
+    transform: translateY(-1px);
+    text-decoration: none;
+  }
+  
+  &.brand {
+    background: var(--brand);
+    
+    &:hover {
+      background: var(--brand-light);
+    }
+  }
+}
+
+/* ========================================
+ * Install Section Component
+ * ======================================== */
+
+.install {
+  background: var(--surface-1);
+  border-radius: var(--radius-lg);
+  padding: var(--space-sm);
+  margin-block-end: var(--space-2xl);
+  
+  & .install-label {
+    font-size: var(--text-xs);
+    color: var(--text-2);
+    text-transform: uppercase;
+    letter-spacing: var(--font-letterspacing-3);
+    margin-block-end: var(--space-2xs);
+  }
+  
+  & code {
+    display: block;
+    background: var(--surface-bg);
+    padding: var(--space-xs);
+    border-radius: var(--radius-md);
+    font-family: var(--font-code);
+    font-size: var(--text-base);
+    overflow-x: auto;
+  }
+}
+
+/* ========================================
+ * Demo Card Component
+ * Using container queries for responsive behavior
+ * ======================================== */
+
+.demo {
+  container-type: inline-size;
+  background: var(--surface-1);
+  border-radius: var(--radius-lg);
+  margin-block-end: var(--space-lg);
+  overflow: hidden;
+  border: var(--border-subtle);
+  transition: border-color var(--duration-normal) var(--ease-out);
+  
+  &:hover {
+    border-color: oklch(35% 0.03 280);
+  }
+  
+  &:has(:focus-visible) {
+    border-color: var(--brand);
+  }
+}
+
+.demo-header {
+  padding: var(--space-sm);
+  border-block-end: var(--border-subtle);
+  background: linear-gradient(180deg, var(--surface-2) 0%, var(--surface-1) 100%);
+  
+  & h2 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-6);
+    margin-block-end: var(--space-3xs);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2xs);
+  }
+  
+  & p {
+    color: var(--text-2);
+    font-size: var(--text-base);
+    margin: 0;
+  }
+}
+
+.demo-canvas {
+  padding: var(--space-sm);
+  background: var(--surface-bg);
+  min-block-size: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.demo-controls {
+  padding: var(--space-sm);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  align-items: center;
+  background: var(--surface-1);
+  
+  @container (width <= 500px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  
+  & label {
+    font-size: var(--text-sm);
+    color: var(--text-2);
+    white-space: nowrap;
+  }
+  
+  @container (width <= 500px) {
+    justify-content: space-between;
+  }
+}
+
+.demo-code {
+  padding: var(--space-sm);
+  border-block-start: var(--border-subtle);
+  background: var(--surface-1);
+  
+  & pre {
+    background: var(--surface-bg);
+    padding: var(--space-xs);
+    border-radius: var(--radius-md);
+    font-family: var(--font-code);
+    font-size: var(--text-sm);
+    overflow-x: auto;
+    margin: 0;
+  }
+  
+  & .comment { color: var(--syntax-comment); }
+  & .attr { color: var(--syntax-keyword); }
+  & .value { color: var(--syntax-string); }
+}
+
+/* ========================================
+ * Button Variants
+ * ======================================== */
+
+.btn-secondary {
+  background: var(--surface-2);
+  
+  &:hover {
+    background: var(--surface-3);
+  }
+}
+
+.btn-ghost {
+  background: transparent;
+  border: var(--border-default);
+  
+  &:hover {
+    background: var(--surface-2);
+    border-color: transparent;
+  }
+}
+
+.btn-sm {
+  padding-inline: var(--space-2xs);
+  padding-block: var(--space-3xs);
+  font-size: var(--text-xs);
+}
+
+.btn-lg {
+  padding-inline: var(--space-md);
+  padding-block: var(--space-xs);
+  font-size: var(--text-base);
+}
+
+/* ========================================
+ * Feature Tag Component
+ * ======================================== */
+
+.feature-tag {
+  display: inline-block;
+  padding-inline: var(--space-2xs);
+  padding-block: var(--space-3xs);
+  background: var(--success-subtle);
+  color: var(--success);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  font-weight: var(--font-weight-6);
+}
+
+/* ========================================
+ * Info Box Component
+ * ======================================== */
+
+.info-box {
+  background: var(--brand-subtle);
+  border-inline-start: 3px solid var(--brand);
+  padding: var(--space-xs);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  font-size: var(--text-base);
+  margin-block: var(--space-xs);
+  
+  & strong {
+    color: var(--brand-light);
+  }
+}
+
+/* ========================================
+ * Value Display Component
+ * ======================================== */
+
+.value-display {
+  font-family: var(--font-code);
+  background: var(--surface-bg);
+  padding-inline: var(--space-2xs);
+  padding-block: var(--space-3xs);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  min-inline-size: 40px;
+  text-align: center;
+}
+
+/* ========================================
+ * Footer Component
+ * ======================================== */
+
+.footer {
+  text-align: center;
+  padding-block: var(--space-lg);
+  color: var(--text-2);
+  font-size: var(--text-base);
+  
+  & a {
+    color: var(--brand-light);
+  }
+}

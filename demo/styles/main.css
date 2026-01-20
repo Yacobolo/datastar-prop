@@ -1,0 +1,18 @@
+/**
+ * Modern CSS Architecture with Cascade Layers
+ * 
+ * Layer order (lowest to highest priority):
+ * 1. reset    - Baseline normalization
+ * 2. tokens   - Design tokens & custom properties
+ * 3. base     - Base element styles
+ * 4. components - Component classes
+ * 5. utilities  - Utility overrides (always win)
+ */
+
+@layer reset, tokens, base, components, utilities;
+
+@import url('./layers/reset.css') layer(reset);
+@import url('./layers/tokens.css') layer(tokens);
+@import url('./layers/base.css') layer(base);
+@import url('./layers/components.css') layer(components);
+@import url('./layers/utilities.css') layer(utilities);
