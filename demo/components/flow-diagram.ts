@@ -83,6 +83,12 @@ export class FlowDiagram extends LitElement {
   }
 
   private draw() {
+    // Cancel any existing animation frame to prevent stacking
+    if (this.animationFrame) {
+      cancelAnimationFrame(this.animationFrame)
+      this.animationFrame = undefined
+    }
+    
     if (!this.ctx || !this.canvas) return
 
     const ctx = this.ctx
