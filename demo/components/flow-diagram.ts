@@ -23,7 +23,7 @@ export interface FlowConfig {
 
 /**
  * A simple flow diagram component using Canvas
- * Demonstrates deep reactivity with node/edge arrays and config objects
+ * Now using HTML attributes with JSON parsing (testing data-attr compatibility)
  */
 @customElement('flow-diagram')
 export class FlowDiagram extends LitElement {
@@ -41,9 +41,10 @@ export class FlowDiagram extends LitElement {
     }
   `
 
-  @property({ type: Array }) nodes: FlowNode[] = []
-  @property({ type: Array }) edges: FlowEdge[] = []
-  @property({ type: Object }) config: FlowConfig = {
+  // Using Lit's built-in type converters - they handle JSON parsing from attributes
+  @property({ type: Array, reflect: true }) nodes: FlowNode[] = []
+  @property({ type: Array, reflect: true }) edges: FlowEdge[] = []
+  @property({ type: Object, reflect: true }) config: FlowConfig = {
     nodeRadius: 30,
     lineWidth: 2,
     animate: true

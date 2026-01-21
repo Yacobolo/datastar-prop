@@ -32,7 +32,7 @@ export class SceneViewer extends LitElement {
     }
   `
 
-  @property({ type: Object }) config: SceneConfig = {
+  @property({ type: Object, reflect: true }) config: SceneConfig = {
     rotationSpeed: 0.01,
     color: '#6366f1',
     wireframe: false,

@@ -33,8 +33,8 @@ export class DataChart extends LitElement {
     }
   `
 
-  @property({ type: Array }) data: ChartDataPoint[] = []
-  @property({ type: Object }) config: ChartConfig = {
+  @property({ type: Array, reflect: true }) data: ChartDataPoint[] = []
+  @property({ type: Object, reflect: true }) config: ChartConfig = {
     type: 'bar',
     theme: 'dark',
     showLegend: true,

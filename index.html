@@ -88,9 +88,9 @@
             
             <div class="demo-canvas">
                 <flow-diagram
-                    data-prop:nodes="$flow.nodes"
-                    data-prop:edges="$flow.edges"
-                    data-prop:config="$flow.config"
+                    data-attr:nodes="$flow.nodes"
+                    data-attr:edges="$flow.edges"
+                    data-attr:config="$flow.config"
                 ></flow-diagram>
             </div>
             
@@ -113,14 +113,14 @@
             </div>
             
             <div class="demo-code">
-                <pre><span class="comment">&lt;!-- Bind arrays and objects to Lit component properties --&gt;</span>
+                <pre><span class="comment">&lt;!-- Bind arrays and objects directly with data-attr --&gt;</span>
 &lt;flow-diagram
-    <span class="attr">data-prop:nodes</span>=<span class="value">"$flow.nodes"</span>
-    <span class="attr">data-prop:edges</span>=<span class="value">"$flow.edges"</span>
-    <span class="attr">data-prop:config</span>=<span class="value">"$flow.config"</span>
+    <span class="attr">data-attr:nodes</span>=<span class="value">"$flow.nodes"</span>
+    <span class="attr">data-attr:edges</span>=<span class="value">"$flow.edges"</span>
+    <span class="attr">data-attr:config</span>=<span class="value">"$flow.config"</span>
 &gt;&lt;/flow-diagram&gt;
 
-<span class="comment">&lt;!-- Nested changes like $flow.config.nodeRadius = 40 trigger Lit updates --&gt;</span></pre>
+<span class="comment">&lt;!-- data-attr auto-stringifies objects and Lit parses them back --&gt;</span></pre>
             </div>
         </div>
 
@@ -136,7 +136,7 @@
             
             <div class="demo-canvas">
                 <scene-viewer
-                    data-prop:config="$scene.config"
+                    data-attr:config="$scene.config"
                 ></scene-viewer>
             </div>
             
@@ -169,13 +169,12 @@
             </div>
             
             <div class="demo-code">
-                <pre><span class="comment">&lt;!-- Config object with multiple properties --&gt;</span>
+                <pre><span class="comment">&lt;!-- Config object bound directly --&gt;</span>
 &lt;scene-viewer
-    <span class="attr">data-prop:config</span>=<span class="value">"$scene.config"</span>
+    <span class="attr">data-attr:config</span>=<span class="value">"$scene.config"</span>
 &gt;&lt;/scene-viewer&gt;
 
-<span class="comment">&lt;!-- Datastar signals are reactive proxies. This plugin ensures
-     Lit's lifecycle methods fire when nested values change. --&gt;</span></pre>
+<span class="comment">&lt;!-- Nested changes trigger updates automatically --&gt;</span></pre>
             </div>
         </div>
 
@@ -191,8 +190,8 @@
             
             <div class="demo-canvas">
                 <data-chart
-                    data-prop:data="$chart.data"
-                    data-prop:config="$chart.config"
+                    data-attr:data="$chart.data"
+                    data-attr:config="$chart.config"
                 ></data-chart>
             </div>
             
@@ -225,10 +224,10 @@
             </div>
             
             <div class="demo-code">
-                <pre><span class="comment">&lt;!-- Bind data arrays and config objects --&gt;</span>
+                <pre><span class="comment">&lt;!-- Bind data arrays and config objects directly --&gt;</span>
 &lt;data-chart
-    <span class="attr">data-prop:data</span>=<span class="value">"$chart.data"</span>
-    <span class="attr">data-prop:config</span>=<span class="value">"$chart.config"</span>
+    <span class="attr">data-attr:data</span>=<span class="value">"$chart.data"</span>
+    <span class="attr">data-attr:config</span>=<span class="value">"$chart.config"</span>
 &gt;&lt;/data-chart&gt;
 
 <span class="comment">&lt;!-- Array mutations like $chart.data.push(...) are detected --&gt;</span></pre>
@@ -266,9 +265,9 @@
         // 2. Import Datastar
         const Datastar = await import('datastar')
         
-        // 3. Import and register the prop plugin
-        const { default: propPlugin } = await import('./dist/index.js')
-        Datastar.attribute(propPlugin(Datastar.effect))
+        // NOTE: Not using prop plugin - testing with data-attr only
+        // const { default: propPlugin } = await import('./dist/index.js')
+        // Datastar.attribute(propPlugin(Datastar.effect))
     </script>
 </body>
 </html>
