@@ -11,7 +11,7 @@ export interface SceneConfig {
 
 /**
  * A Three.js scene viewer component
- * Demonstrates deep reactivity with 3D scene configuration
+ * Demonstrates Datastar data-attr integration with config objects
  */
 @customElement('scene-viewer')
 export class SceneViewer extends LitElement {

@@ -1,201 +1,153 @@
-# @yacobolo/datastar-prop
+# Lit + Datastar Integration Examples
 
-[![npm version](https://img.shields.io/npm/v/@yacobolo/datastar-prop.svg)](https://www.npmjs.com/package/@yacobolo/datastar-prop)
-[![Release](https://github.com/yacobolo/datastar-prop/actions/workflows/release.yml/badge.svg)](https://github.com/yacobolo/datastar-prop/actions/workflows/release.yml)
-[![GitHub Pages](https://github.com/yacobolo/datastar-prop/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/yacobolo/datastar-prop/actions/workflows/gh-pages.yml)
+[![GitHub Pages](https://github.com/yacobolo/datastar-lit-examples/actions/workflows/gh-pages.yml/badge.svg)](https://github.com/yacobolo/datastar-lit-examples/actions/workflows/gh-pages.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A [Datastar](https://data-star.dev) plugin that provides property binding to sync element properties with reactive signals.
+Examples demonstrating how to integrate [Lit](https://lit.dev) web components with [Datastar](https://data-star.dev) using the built-in `data-attr` plugin.
 
-## Features
+**[View Live Demo](https://yacobolo.github.io/datastar-lit-examples/)**
 
-- **Property binding** - Bind signals directly to DOM element properties (not attributes)
-- **Deep reactivity** - Automatically subscribes to nested signal changes
-- **Lit component support** - Calls `requestUpdate()` for proper Lit lifecycle integration
-- **Single & multi-property syntax** - Bind one property or multiple at once
-- **Kebab-case conversion** - `data-prop:color-config` becomes `colorConfig`
-- **Tiny bundle** - ~800 bytes minified
+## Key Discovery
 
-## Why This Plugin?
+**You don't need a custom plugin to pass complex objects to Lit components!**
 
-[Datastar](https://data-star.dev) includes a built-in [`data-attr`](https://data-star.dev/reference/attributes#data-attr) plugin for setting HTML attributes, but HTML attributes and DOM properties are not the same thing.
-
-While `data-attr` works great for HTML attributes (like `class`, `id`, `href`), many DOM interactions require setting **properties** directly:
-
-- Input `value` property (vs. the `value` attribute which only sets initial value)
-- Checkbox `checked` property  
-- Element `disabled` property for real-time form control
-- **Complex objects/arrays to web components** (where JSON.stringify won't work)
-
-This plugin fills that gap with added benefits:
-- **Deep reactivity** ensures nested signal changes trigger updates
-- **Lit support** handles Datastar's reactive proxies correctly
-
-## Installation
-
-```bash
-npm install @yacobolo/datastar-prop
-```
-
-## Demo
-
-**[View Interactive Demo →](https://yacobolo.github.io/datastar-prop/)**
-
-## Usage
-
-This plugin requires an import map to resolve the `datastar` module:
+Datastar's built-in `data-attr` works perfectly:
 
 ```html
-<script type="importmap">
-{
-  "imports": {
-    "datastar": "https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.7/bundles/datastar.js"
-  }
-}
-</script>
-<script type="module">
-  // Import the plugin - it will auto-register with Datastar
-  import 'https://cdn.jsdelivr.net/npm/@yacobolo/datastar-prop@1/dist/index.js';
-</script>
+<flow-diagram
+    data-attr:nodes="$flow.nodes"
+    data-attr:edges="$flow.edges"
+    data-attr:config="$flow.config"
+></flow-diagram>
 ```
 
-Note: Using `@1` will automatically use the latest v1.x.x version.
+## How It Works
 
-## API
+### 1. Datastar's `data-attr` Auto-Stringifies
 
-### Single Property Binding
-
-Bind a single property using the `:property-name` suffix:
-
-```html
-<input data-prop:value="$mySignal" />
-<input data-prop:checked="$isChecked" />
-<button data-prop:disabled="$isDisabled">Submit</button>
-```
-
-Property names are converted from kebab-case to camelCase:
-- `data-prop:color-config` → `colorConfig`
-- `data-prop:my-property` → `myProperty`
-
-### Multiple Property Binding
-
-Bind multiple properties at once using an object:
-
-```html
-<input data-prop="{ value: $inputValue, disabled: $isDisabled }" />
-```
-
-### Complex Objects (Web Components)
-
-Pass complex objects to web components - the main use case for this plugin:
-
-```html
-<div data-signals="{ 
-  colorConfig: { r: 255, g: 100, b: 50, name: 'Orange' },
-  items: ['Apple', 'Banana', 'Cherry']
-}">
-  
-  <!-- Pass nested object to Lit component -->
-  <color-picker data-prop:color-config="$colorConfig"></color-picker>
-  
-  <!-- Pass array to list component -->
-  <item-list data-prop:items="$items"></item-list>
-  
-</div>
-```
-
-The plugin's **deep reactivity** ensures that changes to nested properties (like `$colorConfig.r = 128`) will trigger updates.
-
-## Deep Reactivity
-
-Unlike simple property binding, this plugin recursively reads all nested properties of your signals. This causes Datastar's effect system to subscribe to changes at any depth:
-
-```html
-<div data-signals="{ config: { nested: { deep: 'value' } } }">
-  <!-- Changes to $config.nested.deep will trigger updates -->
-  <my-component data-prop:config="$config"></my-component>
-</div>
-```
-
-## Lit Component Support
-
-When working with Lit components, Datastar's reactive proxies maintain the same object reference when internal values change. This would normally prevent Lit from detecting changes.
-
-This plugin automatically calls `requestUpdate(propName)` on Lit elements, ensuring proper lifecycle updates:
+When you pass an object or array to `data-attr`, it internally calls `JSON.stringify()`:
 
 ```typescript
-// Your Lit component
+// From Datastar's attr.ts plugin
+} else {
+  el.setAttribute(key, JSON.stringify(val))
+}
+```
+
+### 2. JSON.stringify Provides Deep Reactivity
+
+Because `JSON.stringify()` runs **inside** Datastar's reactive effect, it reads all nested properties. This means Datastar tracks dependencies on every nested value:
+
+```javascript
+// When this runs inside the effect:
+JSON.stringify($flow.nodes)
+
+// It accesses: $flow.nodes[0].id, $flow.nodes[0].label, 
+// $flow.nodes[0].x, $flow.nodes[0].y, $flow.nodes[0].color, etc.
+// All become tracked dependencies!
+```
+
+### 3. Lit's Type Converters Parse JSON Back
+
+Lit's `@property()` decorator with `type: Array` or `type: Object` automatically parses JSON strings from attributes:
+
+```typescript
+@property({ type: Array }) nodes: FlowNode[] = []
+@property({ type: Object }) config: FlowConfig = { ... }
+```
+
+## Examples
+
+This repo includes three working examples:
+
+### Flow Diagram
+- Demonstrates arrays of objects (`nodes`, `edges`)
+- Nested object mutations (`$flow.nodes[0].color = 'red'`)
+- Array mutations (`$flow.nodes.push(...)`)
+
+### 3D Scene Viewer
+- Three.js integration
+- Config object with multiple properties
+- Real-time property updates
+
+### Data Chart
+- ECharts integration
+- Array data binding
+- Config object binding
+
+## Usage Pattern
+
+### 1. Define Your Lit Component
+
+```typescript
+import { LitElement, html } from 'lit'
+import { customElement, property } from 'lit/decorators.js'
+
+interface MyConfig {
+  color: string
+  size: number
+}
+
 @customElement('my-component')
-class MyComponent extends LitElement {
-  @property({ type: Object })
-  config = {};
-  
-  updated(changedProperties) {
-    // This fires correctly when $config changes internally
-    if (changedProperties.has('config')) {
-      console.log('Config updated:', this.config);
-    }
+export class MyComponent extends LitElement {
+  // Use type: Object or type: Array for automatic JSON parsing
+  @property({ type: Object }) config: MyConfig = { color: 'blue', size: 10 }
+  @property({ type: Array }) items: string[] = []
+
+  render() {
+    return html`
+      <div style="color: ${this.config.color}">
+        ${this.items.map(item => html`<p>${item}</p>`)}
+      </div>
+    `
   }
 }
 ```
 
-## Manual Registration
+### 2. Use with Datastar
 
-If you need to register the plugin manually (e.g., for custom bundling):
+```html
+<div data-signals='{
+  "config": { "color": "red", "size": 20 },
+  "items": ["Apple", "Banana", "Cherry"]
+}'>
+  <my-component
+    data-attr:config="$config"
+    data-attr:items="$items"
+  ></my-component>
 
-```typescript
-import propPlugin from '@yacobolo/datastar-prop';
-import { attribute, effect } from 'datastar';
-
-// Register manually
-attribute(propPlugin(effect));
+  <!-- Nested changes work! -->
+  <button data-on:click="$config.color = 'green'">Change Color</button>
+  
+  <!-- Array mutations work! -->
+  <button data-on:click="$items.push('Date')">Add Item</button>
+</div>
 ```
 
-## Testing
+## Limitations
 
-```bash
-task test
-```
+This approach works great for **JSON-serializable data**. If you need to pass:
+
+- Functions
+- Date objects
+- Map/Set
+- Circular references
+- Class instances with methods
+
+You'll need a different approach (custom plugin or direct property setting via `data-on`).
 
 ## Development
 
-This project uses [Task](https://taskfile.dev) for task automation.
-
 ```bash
-# Show available tasks
-task
+# Install dependencies
+pnpm install
 
-# Build and run development server
-task dev
+# Build and run dev server
+pnpm dev
 
-# Production build
-task build
-
-# Run tests
-task test
+# Build only
+pnpm build
 ```
-
-## Releases
-
-Releases are managed manually using Task commands:
-
-```bash
-# Bump patch version and publish (1.0.1 → 1.0.2)
-task release:patch
-
-# Bump minor version and publish (1.0.1 → 1.1.0)
-task release:minor
-
-# Bump major version and publish (1.0.1 → 2.0.0)
-task release:major
-```
-
-Each release command will:
-1. Build the project
-2. Run tests
-3. Bump the version
-4. Publish to npm
-5. Push tags to GitHub
 
 ## License
 

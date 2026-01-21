@@ -1,61 +1,34 @@
 {
-  "name": "@yacobolo/datastar-prop",
-  "version": "1.0.2",
-  "description": "A Datastar plugin that provides property binding to sync element properties with reactive signals, with deep reactivity and Lit component support",
+  "name": "@yacobolo/datastar-lit-examples",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Examples demonstrating Lit web component integration with Datastar using data-attr",
   "type": "module",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
-  "files": [
-    "dist/index.js",
-    "dist/index.js.map",
-    "dist/index.d.ts",
-    "README.md"
-  ],
   "scripts": {
-    "build": "tsc && NODE_ENV=production node esbuild.config.js",
-    "build:dev": "tsc && node esbuild.config.js",
-    "build:demo": "tsc -p demo/tsconfig.json && node esbuild.config.js",
-    "build:css": "node esbuild.config.js",
-    "dev": "pnpm build:dev && pnpm build:demo && go run serve.go",
-    "test": "node --test dist/index.test.js",
-    "test:compile": "tsc && node --test dist/index.test.js",
-    "prepublishOnly": "pnpm build && pnpm test"
+    "build": "tsc -p demo/tsconfig.json && node esbuild.config.js",
+    "dev": "pnpm build && go run serve.go"
   },
   "keywords": [
     "datastar",
-    "plugin",
-    "property",
-    "binding",
-    "reactive",
-    "signals",
     "lit",
     "web-components",
-    "deep-reactivity"
+    "examples",
+    "integration"
   ],
   "author": "yacobolo",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yacobolo/datastar-prop.git"
+    "url": "git+https://github.com/yacobolo/datastar-lit-examples.git"
   },
   "bugs": {
-    "url": "https://github.com/yacobolo/datastar-prop/issues"
+    "url": "https://github.com/yacobolo/datastar-lit-examples/issues"
   },
-  "homepage": "https://github.com/yacobolo/datastar-prop#readme",
+  "homepage": "https://github.com/yacobolo/datastar-lit-examples#readme",
   "devDependencies": {
-    "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.10.0",
     "@types/three": "^0.182.0",
     "datastar": "github:starfederation/datastar",
     "esbuild": "^0.24.0",
-    "jsdom": "^25.0.1",
     "lit": "^3.3.2",
     "typescript": "^5.7.0"
   }

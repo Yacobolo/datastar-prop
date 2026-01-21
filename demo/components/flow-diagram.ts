@@ -23,7 +23,7 @@ export interface FlowConfig {
 
 /**
  * A simple flow diagram component using Canvas
- * Demonstrates deep reactivity with node/edge arrays and config objects
+ * Demonstrates Datastar data-attr integration with arrays and nested objects
  */
 @customElement('flow-diagram')
 export class FlowDiagram extends LitElement {
@@ -41,6 +41,7 @@ export class FlowDiagram extends LitElement {
     }
   `
 
+  // Using Lit's built-in type converters - they handle JSON parsing from attributes
   @property({ type: Array }) nodes: FlowNode[] = []
   @property({ type: Array }) edges: FlowEdge[] = []
   @property({ type: Object }) config: FlowConfig = {

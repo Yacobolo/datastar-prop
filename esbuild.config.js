@@ -2,20 +2,7 @@ import esbuild from 'esbuild'
 
 const isProd = process.env.NODE_ENV === 'production'
 
-// Main plugin build
-const pluginConfig = {
-  entryPoints: ['src/index.ts'],
-  bundle: true,
-  format: 'esm',
-  outfile: 'dist/index.js',
-  minify: isProd,
-  sourcemap: true,
-  target: 'es2021',
-  // External dependencies - users should load datastar separately via import map
-  external: ['datastar'],
-}
-
-// Demo components build (for the demo page)
+// Demo components build
 const demoConfig = {
   entryPoints: ['demo/components/index.ts'],
   bundle: true,
@@ -25,7 +12,7 @@ const demoConfig = {
   sourcemap: true,
   target: 'es2021',
   // External - loaded via CDN importmap in index.html
-  external: ['lit', 'lit/decorators.js', 'three', 'echarts'],
+  external: ['lit', 'lit/decorators.js', 'lit/directives/repeat.js', 'three', 'echarts'],
 }
 
 // Demo CSS build with modern features
@@ -42,9 +29,6 @@ const cssConfig = {
 // Build all
 async function build() {
   try {
-    await esbuild.build(pluginConfig)
-    console.log('Plugin build complete')
-    
     await esbuild.build(demoConfig)
     console.log('Demo components build complete')
     
