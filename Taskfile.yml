@@ -12,58 +12,10 @@ tasks:
   dev:
     desc: Build and run development server
     cmds:
-      - pnpm build:dev
-      - pnpm build:demo
+      - pnpm build
       - go run serve.go
 
   build:
-    desc: Production build
+    desc: Build demo components and styles
     cmds:
       - pnpm build
-
-  test:
-    desc: Run tests
-    cmds:
-      - pnpm test
-
-  publish:
-    desc: Build, test, and publish to npm (assumes version already bumped)
-    cmds:
-      - npm login
-      - pnpm build
-      - pnpm test
-      - npm publish --access public
-    prompt: Are you sure you want to publish to npm?
-
-  release:patch:
-    desc: Bump patch version and publish (1.0.1 → 1.0.2)
-    cmds:
-      - npm login
-      - pnpm build
-      - pnpm test
-      - npm version patch
-      - npm publish --access public
-      - git push origin main --follow-tags
-    prompt: This will bump the patch version and publish to npm. Continue?
-
-  release:minor:
-    desc: Bump minor version and publish (1.0.1 → 1.1.0)
-    cmds:
-      - npm login
-      - pnpm build
-      - pnpm test
-      - npm version minor
-      - npm publish --access public
-      - git push origin main --follow-tags
-    prompt: This will bump the minor version and publish to npm. Continue?
-
-  release:major:
-    desc: Bump major version and publish (1.0.1 → 2.0.0)
-    cmds:
-      - npm login
-      - pnpm build
-      - pnpm test
-      - npm version major
-      - npm publish --access public
-      - git push origin main --follow-tags
-    prompt: This will bump the major version and publish to npm. Continue?

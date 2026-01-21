@@ -11,7 +11,7 @@ export interface SceneConfig {
 
 /**
  * A Three.js scene viewer component
- * Demonstrates deep reactivity with 3D scene configuration
+ * Demonstrates Datastar data-attr integration with config objects
  */
 @customElement('scene-viewer')
 export class SceneViewer extends LitElement {
@@ -32,7 +32,7 @@ export class SceneViewer extends LitElement {
     }
   `
 
-  @property({ type: Object, reflect: true }) config: SceneConfig = {
+  @property({ type: Object }) config: SceneConfig = {
     rotationSpeed: 0.01,
     color: '#6366f1',
     wireframe: false,

@@ -16,7 +16,7 @@ export interface ChartConfig {
 
 /**
  * An ECharts wrapper component
- * Demonstrates deep reactivity with chart data arrays and config
+ * Demonstrates Datastar data-attr integration with data arrays and config
  */
 @customElement('data-chart')
 export class DataChart extends LitElement {
@@ -33,8 +33,8 @@ export class DataChart extends LitElement {
     }
   `
 
-  @property({ type: Array, reflect: true }) data: ChartDataPoint[] = []
-  @property({ type: Object, reflect: true }) config: ChartConfig = {
+  @property({ type: Array }) data: ChartDataPoint[] = []
+  @property({ type: Object }) config: ChartConfig = {
     type: 'bar',
     theme: 'dark',
     showLegend: true,

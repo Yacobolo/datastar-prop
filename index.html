@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yacobolo/datastar-prop - Property Binding for Lit Components</title>
-    <meta name="description" content="A Datastar plugin for binding reactive signals to Lit web component properties with deep reactivity support">
+    <title>Lit + Datastar Integration Examples</title>
+    <meta name="description" content="Examples demonstrating how to integrate Lit web components with Datastar using data-attr">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>%E2%9A%A1</text></svg>">
     
     <!-- Open Props - Design tokens only (no normalize - we use our own dark theme) -->
@@ -60,28 +60,21 @@
         }
     }'>
         <header class="header">
-            <h1>@yacobolo/datastar-prop</h1>
-            <p>Property binding for Lit web components with deep reactivity</p>
+            <h1>Lit + Datastar</h1>
+            <p>Integrating Lit web components with Datastar using <code>data-attr</code></p>
             <div class="badges">
-                <a href="https://github.com/yacobolo/datastar-prop" class="badge" target="_blank">GitHub</a>
-                <a href="https://www.npmjs.com/package/@yacobolo/datastar-prop" class="badge" target="_blank">npm</a>
+                <a href="https://github.com/yacobolo/datastar-lit-examples" class="badge" target="_blank">GitHub</a>
                 <a href="https://lit.dev" class="badge" target="_blank">Lit</a>
                 <a href="https://data-star.dev" class="badge" target="_blank">Datastar</a>
-                <span class="badge brand">Deep Reactivity</span>
             </div>
         </header>
-
-        <div class="install">
-            <div class="install-label">Install</div>
-            <code>npm install @yacobolo/datastar-prop</code>
-        </div>
 
         <!-- Demo 1: Flow Diagram -->
         <div class="demo">
             <div class="demo-header">
                 <h2>
                     Flow Diagram
-                    <span class="feature-tag">Deep Reactivity</span>
+                    <span class="feature-tag">Arrays + Objects</span>
                 </h2>
                 <p>Pass node and edge arrays to a Lit component. Nested changes trigger updates automatically.</p>
             </div>
@@ -120,7 +113,9 @@
     <span class="attr">data-attr:config</span>=<span class="value">"$flow.config"</span>
 &gt;&lt;/flow-diagram&gt;
 
-<span class="comment">&lt;!-- data-attr auto-stringifies objects and Lit parses them back --&gt;</span></pre>
+<span class="comment">&lt;!-- Lit component with type converters --&gt;</span>
+@property({ type: Array }) nodes: FlowNode[] = []
+@property({ type: Object }) config: FlowConfig = { ... }</pre>
             </div>
         </div>
 
@@ -129,9 +124,9 @@
             <div class="demo-header">
                 <h2>
                     3D Scene Viewer
-                    <span class="feature-tag">requestUpdate()</span>
+                    <span class="feature-tag">Config Object</span>
                 </h2>
-                <p>Three.js scene controlled by Datastar signals. The plugin calls <code>requestUpdate()</code> for Lit.</p>
+                <p>Three.js scene controlled by Datastar signals. Nested property changes work seamlessly.</p>
             </div>
             
             <div class="demo-canvas">
@@ -174,7 +169,8 @@
     <span class="attr">data-attr:config</span>=<span class="value">"$scene.config"</span>
 &gt;&lt;/scene-viewer&gt;
 
-<span class="comment">&lt;!-- Nested changes trigger updates automatically --&gt;</span></pre>
+<span class="comment">&lt;!-- Why it works: data-attr calls JSON.stringify() internally,
+     which reads all nested properties within Datastar's reactive effect --&gt;</span></pre>
             </div>
         </div>
 
@@ -183,9 +179,9 @@
             <div class="demo-header">
                 <h2>
                     Data Chart
-                    <span class="feature-tag">Array Binding</span>
+                    <span class="feature-tag">Array Mutations</span>
                 </h2>
-                <p>ECharts visualization with reactive data array and theme configuration.</p>
+                <p>ECharts visualization with reactive data array. Push, pop, and mutations all work.</p>
             </div>
             
             <div class="demo-canvas">
@@ -259,15 +255,11 @@
     </script>
     
     <script type="module">
-        // 1. Import demo components first - defines custom elements
+        // 1. Import demo components - defines custom elements
         await import('./demo/dist/components.js')
         
-        // 2. Import Datastar
-        const Datastar = await import('datastar')
-        
-        // NOTE: Not using prop plugin - testing with data-attr only
-        // const { default: propPlugin } = await import('./dist/index.js')
-        // Datastar.attribute(propPlugin(Datastar.effect))
+        // 2. Import Datastar - that's all you need!
+        await import('datastar')
     </script>
 </body>
 </html>
